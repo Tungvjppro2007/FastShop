@@ -1,0 +1,39 @@
+version: '3.8'
+
+services:
+
+  mssqldb:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: mssql_container
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=YourStrong@Password123
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+    networks:
+      - fastshop-network
+
+  springboot-app:
+    build: .
+    container_name: springboot_container
+    restart: always
+    ports:
+      - "8000:8000"
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:sqlserver://mssqldb:1433;databaseName=Fastshop;encrypt=true;trustServerCertificate=true
+      - SPRING_DATASOURCE_USERNAME=sa
+      - SPRING_DATASOURCE_PASSWORD=YourStrong@Password123
+      - SPRING_THYMELEAF_PREFIX=classpath:/templates/
+    depends_on:
+      - mssqldb
+    networks:
+      - fastshop-network
+
+volumes:
+  mssql_data:
+
+networks:
+  fastshop-network:
+    driver: bridge

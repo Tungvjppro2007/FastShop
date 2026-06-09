@@ -1,0 +1,37 @@
+name: Deploy Web App
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-lastest
+
+    steps:
+    - name: Executing remote ssh commands using ssh-key
+      uses: appleboy/ssh-action@v1.0.3
+      with:
+        host: ${{ secrets.SERVER_HOST }}
+        username: ${{ secrets.SERVER_USER }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        port: 24700
+        script: |
+          echo "==== ĐANG TRIỂN KHAI CẬP NHẬT ỨNG DỤNG ===="
+
+          cd /path/to/your/project-folder
+
+          git pull origin main
+
+          docker compose down
+          docker compose up -d --build
+
+          echo "==== ĐÃ RESTART DOCKER COMPOSE THÀNH CÔNG ===="
+
+    - name: Check System Health Status
+      run: |
+        echo "Chờ 5 giây cho container ổn định..."
+        sleep 5
+        echo "Đang kiểm tra phản hồi từ Server..."
+        curl -f http://${{ secrets.SERVER_HOST }} || exit 1
+        echo "Hệ thống hoạt động bình thường!"

@@ -19,7 +19,7 @@ jobs:
         script: |
           echo "==== ĐANG TRIỂN KHAI CẬP NHẬT ỨNG DỤNG ===="
 
-          cd /path/to/your/project-folder
+          cd ~/chi-tung/ChiTung-compose-app/FastShop
 
           git pull origin main
 

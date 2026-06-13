@@ -21,6 +21,8 @@ jobs:
 
           cd /app
 
+          git config --global --add safe.directory /app
+        
           git pull origin main
 
           docker compose down

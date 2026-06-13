@@ -15,11 +15,11 @@ jobs:
         host: ${{ secrets.SERVER_HOST }}
         username: ${{ secrets.SERVER_USER }}
         key: ${{ secrets.SSH_PRIVATE_KEY }}
-        port: 24700
+        port: ${{ secrets.SSH_PORT }}
         script: |
           echo "==== ĐANG TRIỂN KHAI CẬP NHẬT ỨNG DỤNG ===="
 
-          cd ~/chi-tung/ChiTung-compose-app/FastShop
+          cd /app
 
           git pull origin main
 

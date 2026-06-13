@@ -25,8 +25,8 @@ jobs:
         
           git pull origin main
 
-          docker compose down
-          docker compose up -d --build
+          docker compose -f /root/chi-tung/ChiTung-compose-app/FastShop/docker-compose.yml down
+          docker compose -f /root/chi-tung/ChiTung-compose-app/FastShop/docker-compose.yml up -d --build
 
           echo "==== ĐÃ RESTART DOCKER COMPOSE THÀNH CÔNG ===="
 

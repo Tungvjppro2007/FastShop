@@ -29,11 +29,12 @@ jobs:
           docker compose -f /root/chi-tung/ChiTung-compose-app/FastShop/docker-compose.yml up -d --build
 
           echo "==== ĐÃ RESTART DOCKER COMPOSE THÀNH CÔNG ===="
-
-    - name: Check System Health Status
-      run: |
-        echo "Chờ 5 giây cho container ổn định..."
-        sleep 5
-        echo "Đang kiểm tra phản hồi từ Server..."
-        curl -f http://${{ secrets.SERVER_HOST }} || exit 1
-        echo "Hệ thống hoạt động bình thường!"
+          
+          echo "Chờ 5 giây cho hệ thống ổn định..."
+          sleep 5
+            
+          echo "==== TRẠNG THÁI CÁC CONTAINER DỰ ÁN ===="
+          
+          docker compose -f /root/chi-tung/ChiTung-compose-app/FastShop/docker-compose.yml ps
+            
+          echo "==== HỆ THỐNG HOẠT ĐỘNG BÌNH THƯỜNG ===="

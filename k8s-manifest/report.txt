@@ -1,0 +1,29 @@
+Github: https://github.com/Tungvjppro2007/FastShop.git
+1. MÔ TẢ ỨNG DỤNG VÀ IMAGE SỬ DỤNG
+- Ứng dụng: FastShop thương mại điện tử chạy ở cổng 8000 (Spring Boot).
+- Database: Microsoft SQL Server chạy ở cổng 1433.
+- Image Web: chitung/fastshop-app:latest.
+- Image Database: mcr.microsoft.com/mssql/server:2022-latest.
+
+2. GIẢI THÍCH CÁC FILE MANIFEST
+- deployment.yaml: Khai báo 2 deployment. 'mssql-db' (1 replica) cấu hình tài nguyên tối thiểu 1GB RAM và mật khẩu SA; 'fastshop-app' (2 replicas) thiết lập đường dẫn kết nối JDBC đến DB và giới hạn RAM 512Mi.
+- service.yaml: Tạo 2 Service dạng ClusterIP nội bộ giúp định tuyến lưu lượng vào Pod DB (cổng 1433) và Pod Web App (cổng 8000).
+- ingress.yaml: Định cấu hình Nginx Ingress Controller bắt HTTP Host 'exam.local' và chuyển hướng vào service 'fastshop-service:8000'.
+
+3. LUỒNG TRUY CẬP NGƯỜI DÙNG
+User -> Trình duyệt (http://exam.local) -> DNS phân giải -> Ingress Controller (Nginx) -> fastshop-service -> Route vào 1 trong 2 Pod 'fastshop-app' -> Pod kết nối dữ liệu qua 'mssql-service' -> Pod 'mssql-db'.
+
+4. LUỒNG TRIỂN KHAI MANIFEST THEO TƯ DUY GITOPS
+Developer push code -> CI Pipeline biên dịch & build Docker image -> Push image lên Registry -> CI tự động cập nhật tag mới trong deployment.yaml tại Git manifest repo -> ArgoCD nhận diện sự thay đổi -> Sync -> Gọi K8s API cập nhật tài nguyên trong Cluster -> Thực hiện Rolling Update không downtime -> Cluster trở lại trạng thái Healthy & Synced.
+
+5. 5 LỖI THƯỜNG GẶP VÀ CÁCH KIỂM TRA
+- Lỗi 1: ImagePullBackOff (Sai tên/tag image). Kiểm tra bằng: kubectl describe pod <pod-name>.
+- Lỗi 2: CrashLoopBackOff (Lỗi logic/không kết nối được DB khi start). Kiểm tra bằng: kubectl logs <pod-name>.
+- Lỗi 3: Pending (Hết tài nguyên RAM/CPU trên cluster). Kiểm tra bằng: kubectl describe pod <pod-name>.
+- Lỗi 4: Không kết nối được Endpoint của Service (Sai label selector). Kiểm tra bằng: kubectl get ep <service-name>.
+- Lỗi 5: HTTP 502 Bad Gateway (Sai targetPort cấu hình trong Service). Kiểm tra bằng: kubectl describe svc <service-name> và kiểm tra log Ingress.
+
+6. GIẢI THÍCH TRẠNG THÁI ARGOCD
+- Synced: Đồng bộ thành công, hệ thống ở trạng thái như manifest.
+- OutOfSync: Đang có sự khác biệt.
+- Healthy: Hệ thống ổn định.

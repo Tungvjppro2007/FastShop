@@ -1,0 +1,71 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mssql-db
+  labels:
+    app: mssql-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mssql-db
+  template:
+    metadata:
+      labels:
+        app: mssql-db
+    spec:
+      containers:
+      - name: mssql
+        image: mcr.microsoft.com/mssql/server:2022-latest
+        ports:
+        - containerPort: 1433
+        env:
+        - name: ACCEPT_EULA
+          value: "Y"
+        - name: MSSQL_SA_PASSWORD
+          value: "YourStrong@Password123"
+        resources:
+          limits:
+            memory: "1500Mi"
+            cpu: "1000m"
+          requests:
+            memory: "1000Mi"
+            cpu: "500m"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: fastshop-app
+  labels:
+    app: fastshop-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: fastshop-app
+  template:
+    metadata:
+      labels:
+        app: fastshop-app
+    spec:
+      containers:
+      - name: fastshop
+        image: chitung/fastshop-app:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: SPRING_DATASOURCE_URL
+          value: "jdbc:sqlserver://mssql-service:1433;databaseName=Fastshop;encrypt=true;trustServerCertificate=true"
+        - name: SPRING_DATASOURCE_USERNAME
+          value: "sa"
+        - name: SPRING_DATASOURCE_PASSWORD
+          value: "YourStrong@Password123"
+        - name: SPRING_THYMELEAF_PREFIX
+          value: "classpath:/templates/"
+        resources:
+          limits:
+            memory: "512Mi"
+            cpu: "500m"
+          requests:
+            memory: "256Mi"
+            cpu: "250m"

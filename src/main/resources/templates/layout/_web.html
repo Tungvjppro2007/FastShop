@@ -33,16 +33,11 @@
           </button>
           
           <!-- logo -->
-<<<<<<< HEAD
           <h1 th:replace="~{layout/_logo::logo}"></h1>
-=======
-          <h1 th:replace="~{/layout/_logo::logo}"></h1>
->>>>>>> 904b1c73d29661e17b04da887160e0c6acf6b9bc
 
           <div class="navbar-nav flex-row order-md-last">
             
             <!-- language -->
-<<<<<<< HEAD
             <div th:replace="~{layout/_language::language}"></div>
             
             <!-- mode light dark and cart -->
@@ -51,16 +46,6 @@
 
             <!-- account -->
             <div th:replace="${auth == null} ? ~{layout/_account :: header-nb} : ~{layout/_account :: header-sb}"></div>
-=======
-            <div th:replace="~{/layout/_language::language}"></div>
-            
-            <!-- mode light dark and cart -->
-            <div th:replace="~{/layout/_mode_cart::mode_cart}"></div>
-
-
-            <!-- account -->
-            <div th:replace="${auth == null} ? ~{/layout/_account :: header-nb} : ~{/layout/_account :: header-sb}"></div>
->>>>>>> 904b1c73d29661e17b04da887160e0c6acf6b9bc
 
 
           </div>
@@ -73,7 +58,6 @@
       <div class="navbar-expand-md">
         <th:block th:if="${auth != null}">
           <th:block th:if="${auth.role.id == 'ADMIN'}">
-<<<<<<< HEAD
             <div th:insert="~{layout/_menu :: menu-admin}" class="navbar-expand-md"></div>
           </th:block>
           <th:block th:if="${auth.role.id == 'STAFF'}">
@@ -85,19 +69,6 @@
         </th:block>
         <th:unless th:if="${auth == null}">
           <div th:insert="~{layout/_menu :: menu-user}" class="navbar-expand-md"></div>
-=======
-            <div th:insert="~{/layout/_menu :: menu-admin}" class="navbar-expand-md"></div>
-          </th:block>
-          <th:block th:if="${auth.role.id == 'STAFF'}">
-            <div th:insert="~{/layout/_menu :: menu-staff}" class="navbar-expand-md"></div>
-          </th:block>
-          <th:block th:if="${auth.role.id == 'USER'}">
-            <div th:insert="~{/layout/_menu :: menu-user}" class="navbar-expand-md"></div>
-          </th:block>
-        </th:block>
-        <th:unless th:if="${auth == null}">
-          <div th:insert="~{/layout/_menu :: menu-user}" class="navbar-expand-md"></div>
->>>>>>> 904b1c73d29661e17b04da887160e0c6acf6b9bc
         </th:unless>
       </div>
 
@@ -114,19 +85,11 @@
       <!-- footer -->
       <th:block th:if="${auth != null}">
         <th:block th:if="${auth.role.id == 'USER' }">
-<<<<<<< HEAD
           <footer th:replace="~{layout/_footer::footer}"></footer>
         </th:block>
       </th:block>
       <th:unless th:if="${auth == null}">
         <footer th:replace="~{layout/_footer::footer}"></footer>
-=======
-          <footer th:replace="~{/layout/_footer::footer}"></footer>
-        </th:block>
-      </th:block>
-      <th:unless th:if="${auth == null}">
-        <footer th:replace="~{/layout/_footer::footer}"></footer>
->>>>>>> 904b1c73d29661e17b04da887160e0c6acf6b9bc
       </th:unless>
     </div>
     <script th:src="@{/angular/sumary.js}"></script>

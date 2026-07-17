@@ -31,6 +31,17 @@ services:
     networks:
       - fastshop-network
 
+  cloudflare-tunnel:
+    image: cloudflare/cloudflared:latest
+    container_name: cloudflared_container
+    restart: always
+    command: tunnel --no-autoupdate run --token eyJhIjoiNGE5MmVhN2RiZmI1MTEyZThmN2VkY2U4NGE0MDk1Y2EiLCJ0IjoiZTZmZjEwMTctMzg1OC00ZWQ1LWIzMjMtMzM2MjU5ZDcwODkzIiwicyI6IlpHVTBNbVJoTTJJdE9EazBNQzAwTlRFMkxUa3lZbUV0TlRJeE1qUTBOVEkyTlRBeiJ9
+    depends_on:
+      - springboot-app
+    networks:
+      - fastshop-network
+
+
 volumes:
   mssql_data:
 
